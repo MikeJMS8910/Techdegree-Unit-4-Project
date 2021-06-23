@@ -1,66 +1,87 @@
-/* Treehouse FSJS Techdegree
- * Project 4 - OOP Game App
- * Game.js */
-
-let hearts = 5
-
-function loseHeart() {
-    hearts -= 1;
-    if(hearts == 0) {
-        document.getElementById("overlay").style.display = "block"
-        document.getElementById("overlay").className = "lose"
-        document.getElementById("game-over-message").innerHTML = "Sorry, you lose!"
-        document.getElementById("btn__reset").innerHTML = "Play Again"
+/*** Treehouse FSJS Techdegree
+  * Project 4 - OOP Game App
+  * The Game class accepts a phrases parameter and handles showing most of the game
+  * functions like choosing the random phrase and other game interactions
+  * (i.e.: removing a life, checking for win/lose, determining when to end game).
+  **/
+ class Game {
+    constructor (phrases) {
+      this.hearts = 5;
+      this.phrases = phrases;
+      this.activePhrase = null;
     }
-
-    document.querySelector("ol").querySelectorAll("li")[hearts].querySelector("img").src = "images/lostHeart.png"
-}
-
-function testKey(key) {
-    good = false
-    finished = true
-    for(x = 0; x < keys.length; x++) {
-        if(key.toLowerCase() == keys[x].toLowerCase()) {
-            good = true
-            document.getElementById("phrase").querySelectorAll("ul")[1].querySelectorAll("li")[x].className = "show"
-        } else {
-            if(document.getElementById("phrase").querySelectorAll("ul")[1].querySelectorAll("li")[x].className !== "show") {
-                finished = false
-            }
+  
+    startGame () { //starts game
+      document.querySelector('#overlay').style.display = 'none';
+  
+      phrase = new Phrase(this.getPhrase());
+      this.activePhrase = phrase.phrase;
+      phrase.addPhraseToDisplay();
+    }
+  
+    getPhrase () { //function for getting random phrase
+      return phrases[Math.floor(Math.random()) * this.phrases.length - 1];
+    }
+  
+    handleInteraction (key) { //function for seeing if anything is clicked
+      let splitPhraseArray = this.activePhrase.split('');
+      let keys = document.querySelectorAll('.key');
+      let isCorrectLetter = phrase.checkLetter(key);
+  
+      if (isCorrectLetter) {
+        phrase.showMatchedLetter();
+      } else {
+        game.removeLife();
+      }
+  
+      keys.forEach(keyLetter => { //function for getting whether a selected key is right or wrong
+        if (keyLetter.innerHTML === key && isCorrectLetter) {
+          keyLetter.className = 'key chosen';
+          keyLetter.disabled = true;
+        } else if (keyLetter.innerHTML === key && !isCorrectLetter) {
+          keyLetter.className = 'key wrong';
+          keyLetter.disabled = true;
         }
+      });
+  
+      if (game.checkForWin()) { //checks if the player lost
+        game.gameOver();
+      }
     }
-
-    if(good == false) {
-        loseHeart()
-    } else {
-        if(finished == true) {
-            document.getElementById("overlay").style.display = "block"
-            document.getElementById("overlay").className = "win"
-            document.getElementById("game-over-message").innerHTML = "Congrats, you win!"
-            document.getElementById("btn__reset").innerHTML = "Play Again"
-        }
+  
+    removeLife () { //function for removing a life if they lost
+      let hearts = document.querySelectorAll('img');
+      this.hearts = this.hearts - 1;
+      hearts[this.hearts].src = 'images/lostHeart.png';
+  
+      if(this.hearts == 0) {
+        game.gameOver();
+      }
     }
-
-    return good
-}
-
-document.getElementById("btn__reset").addEventListener("click", (e) => {
-    if(document.getElementById("btn__reset").innerHTML == "Play Again") {
-        location.reload()
-    } else {
-        e.target.parentNode.style.display = "none"
+  
+    checkForWin () { //function for checking if the player won or lost
+      let totalLetters = document.querySelectorAll('li.letter');
+      let shownLetters = document.querySelectorAll('li.show.letter');
+  
+      if (shownLetters.length === totalLetters.length) {
+        return true;
+      }
+  
+      return false;
     }
-});
-
-for(x = 0; x < 3; x++) {
-    document.getElementById("qwerty").querySelectorAll(".keyrow")[x].querySelectorAll(".key").forEach(item => {
-        item.addEventListener("click", (e) => {
-            e.target.disabled = true
-            if(testKey(e.target.innerHTML)) {
-                e.target.className = "chosen"
-            } else {
-                e.target.className = "wrong"
-            }
-        })
-    });
-}
+  
+    gameOver () { //function for ending the game
+      let won = game.checkForWin();
+  
+      if (won) {
+        document.querySelector('#overlay').className = 'win';
+        document.querySelector('#game-over-message').textContent = 'Congrats You Win!';
+      } else {
+        document.querySelector('#overlay').className = 'lose';
+        document.querySelector('#game-over-message').textContent = 'You lost all of your hearts!';
+      }
+      document.querySelector('#overlay').style.display = 'flex';
+      document.querySelector('#btn__reset').textContent = 'Play Again';
+  
+    }
+  }
