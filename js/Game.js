@@ -6,30 +6,34 @@
   **/
  class Game {
     constructor (phrases) {
-      this.hearts = 5;
-      this.phrases = phrases;
-      this.activePhrase = null;
+      this.missed = 0;
+      this.phrases = [
+        {value: 'treehouse unit four'},
+        {value: 'keep on coding'},
+        {value: 'this is phrase hunter'},
+        {value: 'you win'},
+        {value: 'congratulations'},
+      ];
     }
   
     startGame () { //starts game
       document.querySelector('#overlay').style.display = 'none';
   
-      phrase = new Phrase(this.getPhrase());
-      this.activePhrase = phrase.phrase;
-      phrase.addPhraseToDisplay();
+      this.phrase = this.getRandomPhrase()//
+      Phrase.addPhraseToDisplay();
     }
   
-    getPhrase () { //function for getting random phrase
-      return phrases[Math.floor(Math.random()) * this.phrases.length - 1];
+    getRandomPhrase () { //function for getting random phrase
+      return this.phrases[Math.floor(Math.random() * 5)].value;
     }
   
     handleInteraction (key) { //function for seeing if anything is clicked
-      let splitPhraseArray = this.activePhrase.split('');
+      this.splitPhraseArray = this.phrase.split('');
       let keys = document.querySelectorAll('.key');
-      let isCorrectLetter = phrase.checkLetter(key);
+      let isCorrectLetter = Phrase.checkLetter(this.splitPhraseArray);
   
       if (isCorrectLetter) {
-        phrase.showMatchedLetter();
+        Phrase.showMatchedLetter(key);
       } else {
         game.removeLife();
       }
@@ -43,7 +47,7 @@
           keyLetter.disabled = true;
         }
       });
-  
+
       if (game.checkForWin()) { //checks if the player lost
         game.gameOver();
       }
@@ -51,10 +55,10 @@
   
     removeLife () { //function for removing a life if they lost
       let hearts = document.querySelectorAll('img');
-      this.hearts = this.hearts - 1;
-      hearts[this.hearts].src = 'images/lostHeart.png';
+      this.missed = this.missed + 1;
+      hearts[this.missed - 1].src = 'images/lostHeart.png';
   
-      if(this.hearts == 0) {
+      if(this.missed == 5) {
         game.gameOver();
       }
     }
