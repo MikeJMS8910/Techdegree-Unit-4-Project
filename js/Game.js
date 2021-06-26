@@ -19,7 +19,7 @@
     startGame () { //starts game
       document.querySelector('#overlay').style.display = 'none';
   
-      this.phrase = this.getRandomPhrase()//
+      this.phrase = this.getRandomPhrase()
       Phrase.addPhraseToDisplay();
     }
   
@@ -28,9 +28,9 @@
     }
   
     handleInteraction (key) { //function for seeing if anything is clicked
-      this.splitPhraseArray = this.phrase.split('');
+      this.activePhrase = this.phrase.split('');
       let keys = document.querySelectorAll('.key');
-      let isCorrectLetter = Phrase.checkLetter(this.splitPhraseArray);
+      let isCorrectLetter = Phrase.checkLetter(this.activePhrase);
   
       if (isCorrectLetter) {
         Phrase.showMatchedLetter(key);
