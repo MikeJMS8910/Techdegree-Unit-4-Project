@@ -6,13 +6,13 @@
   **/
  class Phrase {
     constructor (phrase) {
-      this.phrase = phrase//gets phrase
+      this.phrase = phrase;//gets phrase
     }
   
-    static addPhraseToDisplay () { //function for showing the phrase on the screen
+    static addPhraseToDisplay (phrase) { //function for showing the phrase on the screen
       let phraseContainer = document.querySelector('.section#phrase > ul');
       
-      let splitPhrase = game.phrase.split('');
+      let splitPhrase = phrase.split('');
       splitPhrase.forEach(character => {
         let li = document.createElement('li');
       

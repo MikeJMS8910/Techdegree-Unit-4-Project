@@ -7,28 +7,22 @@
  class Game {
     constructor (phrases) {
       this.missed = 0;
-      this.phrases = [
-        {value: 'treehouse unit four'},
-        {value: 'keep on coding'},
-        {value: 'this is phrase hunter'},
-        {value: 'you win'},
-        {value: 'congratulations'},
-      ];
+      this.phrases = ['treehouse unit four', 'keep on coding', 'this is phrase hunter', 'you win', 'congratulations'];
     }
   
     startGame () { //starts game
       document.querySelector('#overlay').style.display = 'none';
   
-      this.phrase = this.getRandomPhrase()
-      Phrase.addPhraseToDisplay();
+      this.phrase = new Phrase(this.getRandomPhrase())
+      Phrase.addPhraseToDisplay(this.phrase.phrase);
     }
   
     getRandomPhrase () { //function for getting random phrase
-      return this.phrases[Math.floor(Math.random() * 5)].value;
+      return this.phrases[Math.floor(Math.random() * 5)];
     }
   
     handleInteraction (key) { //function for seeing if anything is clicked
-      this.activePhrase = this.phrase.split('');
+      this.activePhrase = this.phrase.phrase.split('');
       let keys = document.querySelectorAll('.key');
       let isCorrectLetter = Phrase.checkLetter(this.activePhrase);
   
