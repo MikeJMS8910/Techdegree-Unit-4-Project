@@ -7,14 +7,17 @@
  class Game {
     constructor (phrases) {
       this.missed = 0;
-      this.phrases = ['treehouse unit four', 'keep on coding', 'this is phrase hunter', 'you win', 'congratulations'];
+      this.phrases = [new Phrase('treehouse unit four'), new Phrase('keep on coding'), new Phrase('this is phrase hunter'), new Phrase('you win'), new Phrase('congratulations')];
+      console.log(this.phrases)
+      this.activePhrase = null
     }
   
     startGame () { //starts game
       document.querySelector('#overlay').style.display = 'none';
   
       this.phrase = new Phrase(this.getRandomPhrase())
-      Phrase.addPhraseToDisplay(this.phrase.phrase);
+      this.activePhrase = this.phrase.phrase
+      Phrase.addPhraseToDisplay(this.activePhrase);
     }
   
     getRandomPhrase () { //function for getting random phrase
@@ -22,9 +25,9 @@
     }
   
     handleInteraction (key) { //function for seeing if anything is clicked
-      this.activePhrase = this.phrase.phrase.split('');
+      this.splitPhrase = this.activePhrase.phrase.split('');
       let keys = document.querySelectorAll('.key');
-      let isCorrectLetter = Phrase.checkLetter(this.activePhrase);
+      let isCorrectLetter = Phrase.checkLetter(this.activePhrase.phrase);
   
       if (isCorrectLetter) {
         Phrase.showMatchedLetter(key);

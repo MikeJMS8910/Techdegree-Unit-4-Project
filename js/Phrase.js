@@ -12,7 +12,7 @@
     static addPhraseToDisplay (phrase) { //function for showing the phrase on the screen
       let phraseContainer = document.querySelector('.section#phrase > ul');
       
-      let splitPhrase = phrase.split('');
+      let splitPhrase = phrase.phrase.split('');
       splitPhrase.forEach(character => {
         let li = document.createElement('li');
       
